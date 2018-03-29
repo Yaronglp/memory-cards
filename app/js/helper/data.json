@@ -1,0 +1,60 @@
+{
+  "openScreen":{
+      "title":"Memory Cards Game",
+      "btn1":"Start Game",
+      "btn2":"Insert your own pics"
+  },
+  "addPicture":{
+      "title":"Add Picture URLs"
+  },
+  "finishGame":{
+      "title":"You finished the Game !"
+  },
+  "cards":[
+    {
+      "pic":"https://lumiere-a.akamaihd.net/v1/images/a280-blaster-rifle_0d9d74a0.jpeg",
+      "alt":"a",
+      "value":1
+    },
+    {
+      "pic":"https://lumiere-a.akamaihd.net/v1/images/image_2702e35a.jpeg",
+      "alt":"b",
+      "value":2
+    },
+    {
+      "pic":"https://lumiere-a.akamaihd.net/v1/images/energy-ball-booma_9d96f2ae.jpeg",
+      "alt":"c",
+      "value":3
+    },
+    {
+      "pic":"https://lumiere-a.akamaihd.net/v1/images/dlt-19-heavy-blaster-rifle_60a77bd6.jpeg",
+      "alt":"d",
+      "value":4
+    },
+    {
+      "pic":"https://lumiere-a.akamaihd.net/v1/images/databank_droidpopper_01_169_b5ada6cc.jpeg",
+      "alt":"e",
+      "value":5
+    },
+    {
+      "pic":"https://lumiere-a.akamaihd.net/v1/images/e-11-blaster-rifle_c6d03948.jpeg",
+      "alt":"f",
+      "value":6
+    },
+    {
+      "pic":"https://lumiere-a.akamaihd.net/v1/images/last-jedi-databank-electro-chain-whip-main-image_93f664c4.jpeg",
+      "alt":"g",
+      "value":7
+    },
+    {
+      "pic":"https://lumiere-a.akamaihd.net/v1/images/Lightsaber_853fb596.jpeg",
+      "alt":"h",
+      "value":8
+    },
+    {
+      "pic":"https://lumiere-a.akamaihd.net/v1/images/z-6-riot-control-baton_35d6b0ec.jpeg",
+      "alt":"i",
+      "value":9
+    }
+  ]
+}

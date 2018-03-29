@@ -1,0 +1,11 @@
+{
+  "presets":["env", "react"],
+  "env": {
+    "production": {
+      "comments": false
+    },
+    "development" : {
+      "comments": true
+    }
+  }
+}
