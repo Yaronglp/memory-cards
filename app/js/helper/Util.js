@@ -54,6 +54,4 @@ let addResourceIfValid = (url, timeout) => {
     });
 };
 
-let duplicateAndScrambleArr = (arr) => sortArrRandomly(duplicateArr(arr));
-
-export {addImgResources, duplicateAndScrambleArr};
+export {addImgResources, duplicateArr, sortArrRandomly};

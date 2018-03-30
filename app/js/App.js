@@ -1,7 +1,7 @@
 import React from 'react';
 import PlayGame from './component/PlayGame';
 import AddPics from './modal/AddPics';
-import {duplicateAndScrambleArr, addImgResources} from './helper/Util';
+import {duplicateArr, sortArrRandomly, addImgResources} from './helper/Util';
 import '../css/main.css';
 import data from './helper/data.json';
 import Choice from "./component/Choice";
@@ -18,7 +18,7 @@ class App extends React.Component{
     }
 
     componentWillMount(){
-        let arr = duplicateAndScrambleArr(data.cards);
+        let arr = duplicateArr(data.cards);
 
         this.setState({
             cards:arr,
@@ -40,7 +40,7 @@ class App extends React.Component{
             tmpArr[i].pic = arr[i];
         }
 
-        this.customCards = duplicateAndScrambleArr(tmpArr);
+        this.customCards = duplicateArr(tmpArr);
 
         this.setState({
             cards:this.customCards,
@@ -67,7 +67,8 @@ class App extends React.Component{
 
     startGame(){
         this.setState({
-            startGame:true
+            startGame:true,
+            cards:sortArrRandomly(this.state.cards)
         });
     }
 
