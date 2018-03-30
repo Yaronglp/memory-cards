@@ -9,7 +9,8 @@ class PlayGame extends React.Component{
         this.peekCard = this.peekCard.bind(this);
         this.cancelPeek = this.cancelPeek.bind(this);
         this.isPermittedToPeek = this.isPermittedToPeek.bind(this);
-        this.exitFinishGameModal = this.exitFinishGameModal.bind(this);
+        this.exitGameModal = this.exitGameModal.bind(this);
+        this.startTimer = this.startTimer.bind(this);
         this.rtPeekedCards = 0;
     }
 
@@ -19,7 +20,9 @@ class PlayGame extends React.Component{
             cardB:{value:'b'},
             peekedCards:0,
             matchedCards:0,
-            finishGame:false
+            finishGame:false,
+            gameOver:false,
+            timerNote:true
         });
     }
 
@@ -32,6 +35,20 @@ class PlayGame extends React.Component{
 
         if(!finishGame && matchedCards === cards.length/2)
             this.finishGame();
+    }
+
+    startTimer(){
+        this.setState({
+            timerNote:false
+        });
+
+        setTimeout(() => {
+            this.rtPeekedCards = 3;
+            this.setState({
+                gameOver:true
+            });
+
+        }, data.timer.sec * 1000);
     }
 
     finishGame(){
@@ -93,7 +110,7 @@ class PlayGame extends React.Component{
         }
     }
 
-    exitFinishGameModal(){
+    exitGameModal(){
         this.setState({
             finishGame:false,
             matchedCards:0
@@ -115,15 +132,29 @@ class PlayGame extends React.Component{
         b.click();
     }
 
+    // TODO: Abstract the render method into multiple components
     render(){
         const {cards} = this.props;
+        const {finishGame, gameOver, timerNote} = this.state;
 
         return (
             <React.Fragment>
                 {
-                    this.state.finishGame === true ?
-                        <Msg okFN={this.exitFinishGameModal}
+                    finishGame === true ?
+                        <Msg okFN={this.exitGameModal}
                              title={data.finishGame.title}/> :
+                        null
+                }
+                {
+                    timerNote === true ?
+                        <Msg okFN={this.startTimer}
+                             title={data.timer.title}/> :
+                        null
+                }
+                {
+                    gameOver === true ?
+                        <Msg okFN={this.exitGameModal}
+                             title={data.gameOver.title}/> :
                         null
                 }
                 <div className="cards_wrapper">

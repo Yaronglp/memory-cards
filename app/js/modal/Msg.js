@@ -7,7 +7,7 @@ class Msg extends Basic {
 
     render(){
         return (
-            <Basic modalClass="win_game_modal">
+            <Basic modalClass="msg_game_modal">
                 {Basic.title(this.titleTxt)}
                 {this.posBtn('OK')}
             </Basic>

@@ -31,8 +31,8 @@
     position:relative;
     width:100%;
     height:100%;
-    transition: 1s;
-    transform-style: preserve-3d;
+    transition:0.9s;
+    transform-style:preserve-3d;
 }
 
 .back_card,
@@ -106,7 +106,7 @@
     z-index:2;
     transform:translate(-50%, -50%);
     width:480px;
-    height:550px;
+    height:528px;
     padding:10px;
     box-shadow:0 0 10px;
 }
@@ -118,7 +118,7 @@
     flex-wrap:wrap;
 }
 
-.modal_content h1{
+.modal_content h2{
     text-align: center;
 }
 
@@ -130,9 +130,9 @@
     padding:0 5px;
 }
 
-.win_game_modal{
-    width:300px;
-    height:200px;
+.msg_game_modal{
+    width:350px;
+    height:175px;
 }
 
 /*********** Open Screen ***********/

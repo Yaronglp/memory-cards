@@ -30,7 +30,7 @@ class Basic extends React.Component{
     }
 
     static title(title){
-        return <h1>{title}</h1>
+        return <h2>{title}</h2>
     }
 
     posBtnFN(){

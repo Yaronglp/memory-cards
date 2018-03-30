@@ -10,6 +10,13 @@
   "finishGame":{
       "title":"You finished the Game !"
   },
+  "gameOver":{
+      "title":"Game over ! Time is running out."
+  },
+  "timer":{
+      "title":"You have 60 seconds, Are you ready ?",
+      "sec":60
+  },
   "cards":[
     {
       "pic":"https://lumiere-a.akamaihd.net/v1/images/a280-blaster-rifle_0d9d74a0.jpeg",
