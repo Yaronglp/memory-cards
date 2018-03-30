@@ -9,9 +9,10 @@ class PlayGame extends React.Component{
         this.peekCard = this.peekCard.bind(this);
         this.cancelPeek = this.cancelPeek.bind(this);
         this.isPermittedToPeek = this.isPermittedToPeek.bind(this);
-        this.exitGameModal = this.exitGameModal.bind(this);
+        this.exitGame = this.exitGame.bind(this);
         this.startTimer = this.startTimer.bind(this);
         this.rtPeekedCards = 0;
+        this.timerTimout = null;
     }
 
     componentWillMount(){
@@ -42,16 +43,25 @@ class PlayGame extends React.Component{
             timerNote:false
         });
 
-        setTimeout(() => {
-            this.rtPeekedCards = 3;
-            this.setState({
-                gameOver:true
-            });
+        this.timerTimout = setTimeout(() => {
+                                this.rtPeekedCards = 3;
+                                this.setState({
+                                    gameOver:true
+                                });
 
-        }, data.timer.sec * 1000);
+                            }, data.timer.sec * 1000);
+    }
+
+    exitGame(){
+        this.setState({
+            finishGame:false,
+            matchedCards:0
+        });
+        this.props.exitFN();
     }
 
     finishGame(){
+        clearTimeout(this.timerTimout);
         this.setState({
             finishGame:true
         });
@@ -110,14 +120,6 @@ class PlayGame extends React.Component{
         }
     }
 
-    exitGameModal(){
-        this.setState({
-            finishGame:false,
-            matchedCards:0
-        });
-        this.props.exitFN();
-    }
-
     cancelPeek(){
         this.setState({
             cardA:{value:'a'},
@@ -141,7 +143,7 @@ class PlayGame extends React.Component{
             <React.Fragment>
                 {
                     finishGame === true ?
-                        <Msg okFN={this.exitGameModal}
+                        <Msg okFN={this.exitGame}
                              title={data.finishGame.title}/> :
                         null
                 }
@@ -153,7 +155,7 @@ class PlayGame extends React.Component{
                 }
                 {
                     gameOver === true ?
-                        <Msg okFN={this.exitGameModal}
+                        <Msg okFN={this.exitGame}
                              title={data.gameOver.title}/> :
                         null
                 }
