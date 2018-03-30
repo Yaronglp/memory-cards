@@ -134,7 +134,6 @@ class PlayGame extends React.Component{
         b.click();
     }
 
-    // TODO: Abstract the render method into multiple components
     render(){
         const {cards} = this.props;
         const {finishGame, gameOver, timerNote} = this.state;

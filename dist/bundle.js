@@ -1035,7 +1035,7 @@ var Basic = function (_React$Component) {
         key: "title",
         value: function title(_title) {
             return _react2.default.createElement(
-                "h1",
+                "h2",
                 null,
                 _title
             );
@@ -1051,7 +1051,7 @@ exports.default = Basic;
 /* 15 */
 /***/ (function(module, exports) {
 
-module.exports = {"openScreen":{"title":"Memory Cards Game","btn1":"Start Game","btn2":"Insert your own pics"},"addPicture":{"title":"Add Picture URLs"},"finishGame":{"title":"You finished the Game !"},"cards":[{"pic":"https://lumiere-a.akamaihd.net/v1/images/a280-blaster-rifle_0d9d74a0.jpeg","alt":"a","value":1},{"pic":"https://lumiere-a.akamaihd.net/v1/images/image_2702e35a.jpeg","alt":"b","value":2},{"pic":"https://lumiere-a.akamaihd.net/v1/images/energy-ball-booma_9d96f2ae.jpeg","alt":"c","value":3},{"pic":"https://lumiere-a.akamaihd.net/v1/images/dlt-19-heavy-blaster-rifle_60a77bd6.jpeg","alt":"d","value":4},{"pic":"https://lumiere-a.akamaihd.net/v1/images/databank_droidpopper_01_169_b5ada6cc.jpeg","alt":"e","value":5},{"pic":"https://lumiere-a.akamaihd.net/v1/images/e-11-blaster-rifle_c6d03948.jpeg","alt":"f","value":6},{"pic":"https://lumiere-a.akamaihd.net/v1/images/last-jedi-databank-electro-chain-whip-main-image_93f664c4.jpeg","alt":"g","value":7},{"pic":"https://lumiere-a.akamaihd.net/v1/images/Lightsaber_853fb596.jpeg","alt":"h","value":8},{"pic":"https://lumiere-a.akamaihd.net/v1/images/z-6-riot-control-baton_35d6b0ec.jpeg","alt":"i","value":9}]}
+module.exports = {"openScreen":{"title":"Memory Cards Game","btn1":"Start Game","btn2":"Insert your own pics"},"addPicture":{"title":"Add Picture URLs"},"finishGame":{"title":"You finished the Game !"},"gameOver":{"title":"Game over ! Time is running out."},"timer":{"title":"You have 60 seconds, Are you ready ?","sec":60},"cards":[{"pic":"https://lumiere-a.akamaihd.net/v1/images/a280-blaster-rifle_0d9d74a0.jpeg","alt":"a","value":1},{"pic":"https://lumiere-a.akamaihd.net/v1/images/image_2702e35a.jpeg","alt":"b","value":2},{"pic":"https://lumiere-a.akamaihd.net/v1/images/energy-ball-booma_9d96f2ae.jpeg","alt":"c","value":3},{"pic":"https://lumiere-a.akamaihd.net/v1/images/dlt-19-heavy-blaster-rifle_60a77bd6.jpeg","alt":"d","value":4},{"pic":"https://lumiere-a.akamaihd.net/v1/images/databank_droidpopper_01_169_b5ada6cc.jpeg","alt":"e","value":5},{"pic":"https://lumiere-a.akamaihd.net/v1/images/e-11-blaster-rifle_c6d03948.jpeg","alt":"f","value":6},{"pic":"https://lumiere-a.akamaihd.net/v1/images/last-jedi-databank-electro-chain-whip-main-image_93f664c4.jpeg","alt":"g","value":7},{"pic":"https://lumiere-a.akamaihd.net/v1/images/Lightsaber_853fb596.jpeg","alt":"h","value":8},{"pic":"https://lumiere-a.akamaihd.net/v1/images/z-6-riot-control-baton_35d6b0ec.jpeg","alt":"i","value":9}]}
 
 /***/ }),
 /* 16 */
@@ -18451,7 +18451,7 @@ var App = function (_React$Component) {
     _createClass(App, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
-            var arr = (0, _Util.duplicateAndScrambleArr)(_data2.default.cards);
+            var arr = (0, _Util.duplicateArr)(_data2.default.cards);
 
             this.setState({
                 cards: arr,
@@ -18475,7 +18475,7 @@ var App = function (_React$Component) {
                 tmpArr[i].pic = arr[i];
             }
 
-            this.customCards = (0, _Util.duplicateAndScrambleArr)(tmpArr);
+            this.customCards = (0, _Util.duplicateArr)(tmpArr);
 
             this.setState({
                 cards: this.customCards,
@@ -18505,7 +18505,8 @@ var App = function (_React$Component) {
         key: 'startGame',
         value: function startGame() {
             this.setState({
-                startGame: true
+                startGame: true,
+                cards: (0, _Util.sortArrRandomly)(this.state.cards)
             });
         }
     }, {
@@ -18589,8 +18590,10 @@ var PlayGame = function (_React$Component) {
         _this.peekCard = _this.peekCard.bind(_this);
         _this.cancelPeek = _this.cancelPeek.bind(_this);
         _this.isPermittedToPeek = _this.isPermittedToPeek.bind(_this);
-        _this.exitFinishGameModal = _this.exitFinishGameModal.bind(_this);
+        _this.exitGame = _this.exitGame.bind(_this);
+        _this.startTimer = _this.startTimer.bind(_this);
         _this.rtPeekedCards = 0;
+        _this.timerTimout = null;
         return _this;
     }
 
@@ -18602,7 +18605,9 @@ var PlayGame = function (_React$Component) {
                 cardB: { value: 'b' },
                 peekedCards: 0,
                 matchedCards: 0,
-                finishGame: false
+                finishGame: false,
+                gameOver: false,
+                timerNote: true
             });
         }
     }, {
@@ -18620,8 +18625,34 @@ var PlayGame = function (_React$Component) {
             if (!finishGame && matchedCards === cards.length / 2) this.finishGame();
         }
     }, {
+        key: 'startTimer',
+        value: function startTimer() {
+            var _this2 = this;
+
+            this.setState({
+                timerNote: false
+            });
+
+            this.timerTimout = setTimeout(function () {
+                _this2.rtPeekedCards = 3;
+                _this2.setState({
+                    gameOver: true
+                });
+            }, _data2.default.timer.sec * 1000);
+        }
+    }, {
+        key: 'exitGame',
+        value: function exitGame() {
+            this.setState({
+                finishGame: false,
+                matchedCards: 0
+            });
+            this.props.exitFN();
+        }
+    }, {
         key: 'finishGame',
         value: function finishGame() {
+            clearTimeout(this.timerTimout);
             this.setState({
                 finishGame: true
             });
@@ -18629,7 +18660,7 @@ var PlayGame = function (_React$Component) {
     }, {
         key: 'compareTwoCards',
         value: function compareTwoCards() {
-            var _this2 = this;
+            var _this3 = this;
 
             var _state2 = this.state,
                 cardA = _state2.cardA,
@@ -18639,7 +18670,7 @@ var PlayGame = function (_React$Component) {
 
             if (cardA.value !== cardB.value) {
                 window.setTimeout(function () {
-                    _this2.flipDiffCards(cardA.ele, cardB.ele);
+                    _this3.flipDiffCards(cardA.ele, cardB.ele);
                 }, 1000);
 
                 this.setState({
@@ -18687,15 +18718,6 @@ var PlayGame = function (_React$Component) {
             }
         }
     }, {
-        key: 'exitFinishGameModal',
-        value: function exitFinishGameModal() {
-            this.setState({
-                finishGame: false,
-                matchedCards: 0
-            });
-            this.props.exitFN();
-        }
-    }, {
         key: 'cancelPeek',
         value: function cancelPeek() {
             this.setState({
@@ -18714,16 +18736,24 @@ var PlayGame = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this3 = this;
+            var _this4 = this;
 
             var cards = this.props.cards;
+            var _state3 = this.state,
+                finishGame = _state3.finishGame,
+                gameOver = _state3.gameOver,
+                timerNote = _state3.timerNote;
 
 
             return _react2.default.createElement(
                 _react2.default.Fragment,
                 null,
-                this.state.finishGame === true ? _react2.default.createElement(_Msg2.default, { okFN: this.exitFinishGameModal,
+                finishGame === true ? _react2.default.createElement(_Msg2.default, { okFN: this.exitGame,
                     title: _data2.default.finishGame.title }) : null,
+                timerNote === true ? _react2.default.createElement(_Msg2.default, { okFN: this.startTimer,
+                    title: _data2.default.timer.title }) : null,
+                gameOver === true ? _react2.default.createElement(_Msg2.default, { okFN: this.exitGame,
+                    title: _data2.default.gameOver.title }) : null,
                 _react2.default.createElement(
                     'div',
                     { className: 'cards_wrapper' },
@@ -18732,9 +18762,9 @@ var PlayGame = function (_React$Component) {
                             val: item.value,
                             alt: item.alt,
                             pic: item.pic,
-                            peekCard: _this3.peekCard,
-                            cancelPeek: _this3.cancelPeek,
-                            isPermittedToPeek: _this3.isPermittedToPeek });
+                            peekCard: _this4.peekCard,
+                            cancelPeek: _this4.cancelPeek,
+                            isPermittedToPeek: _this4.isPermittedToPeek });
                     })
                 )
             );
@@ -18890,7 +18920,7 @@ var Msg = function (_Basic) {
         value: function render() {
             return React.createElement(
                 _Basic3.default,
-                { modalClass: 'win_game_modal' },
+                { modalClass: 'msg_game_modal' },
                 _Basic3.default.title(this.titleTxt),
                 this.posBtn('OK')
             );
@@ -19088,12 +19118,9 @@ var addResourceIfValid = function addResourceIfValid(url, timeout) {
     });
 };
 
-var duplicateAndScrambleArr = function duplicateAndScrambleArr(arr) {
-    return sortArrRandomly(duplicateArr(arr));
-};
-
 exports.addImgResources = addImgResources;
-exports.duplicateAndScrambleArr = duplicateAndScrambleArr;
+exports.duplicateArr = duplicateArr;
+exports.sortArrRandomly = sortArrRandomly;
 
 /***/ }),
 /* 35 */
@@ -19130,7 +19157,7 @@ exports = module.exports = __webpack_require__(37)();
 
 
 // module
-exports.push([module.i, "#main_container{\r\n    display:flex;\r\n    justify-content: center;\r\n}\r\n\r\n/*********** Cards ***********/\r\n\r\n.cards_wrapper{\r\n    display:flex;\r\n    flex-wrap: wrap;\r\n    width:calc(250px * 6 + (6 * 2 * 5px));\r\n}\r\n\r\n.card_container{\r\n    width:250px;\r\n    height:300px;\r\n    margin:5px;\r\n    border-radius: 10px;\r\n    outline:none;\r\n}\r\n\r\n.flip_card:hover {\r\n    cursor:pointer;\r\n}\r\n\r\n.flip_card.flipped{\r\n    transform: rotateY(180deg);\r\n}\r\n\r\n.flip_card{\r\n    position:relative;\r\n    width:100%;\r\n    height:100%;\r\n    transition: 1s;\r\n    transform-style: preserve-3d;\r\n}\r\n\r\n.back_card,\r\n.front_card{\r\n    width:100%;\r\n    height:100%;\r\n    position:absolute;\r\n}\r\n\r\n.front_card{\r\n    background:linear-gradient(to left, hotpink, blueviolet);\r\n}\r\n\r\n.back_card{\r\n    transform:rotateY(180deg);\r\n}\r\n\r\n.img_card{\r\n    width:100%;\r\n    height:100%;\r\n}\r\n\r\n/*********** General ***********/\r\n\r\n.truncate{\r\n    overflow:hidden;\r\n    white-space:nowrap;\r\n    text-overflow: ellipsis;\r\n}\r\n\r\n/*********** Buttons ***********/\r\n\r\n.btn{\r\n    width:100px;\r\n    height:50px;\r\n    font-size:1.5em;\r\n    outline: none;\r\n    cursor:pointer;\r\n    box-shadow:0 0 10px;\r\n}\r\n\r\n.btn:hover{\r\n    background:green;\r\n    color:#fff;\r\n    outline:none;\r\n    border:none;\r\n    box-shadow:0 0 10px #000;\r\n}\r\n\r\n.btn:active{\r\n    box-shadow:none;\r\n}\r\n\r\n.cancel_btn:hover{\r\n    background:red;\r\n}\r\n\r\n.inst_btn{\r\n    width:180px;\r\n    margin:15px;\r\n}\r\n\r\n\r\n/*********** Modal ***********/\r\n\r\n.modal{\r\n    position:absolute;\r\n    top:50%;\r\n    left:50%;\r\n    background: #fff;\r\n    z-index:2;\r\n    transform:translate(-50%, -50%);\r\n    width:480px;\r\n    height:550px;\r\n    padding:10px;\r\n    box-shadow:0 0 10px;\r\n}\r\n\r\n.modal_content{\r\n    display:flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    flex-wrap:wrap;\r\n}\r\n\r\n.modal_content h1{\r\n    text-align: center;\r\n}\r\n\r\n.modal_content input{\r\n    width:90%;\r\n    margin:5px 0;\r\n    font-size: 1em;\r\n    height:28px;\r\n    padding:0 5px;\r\n}\r\n\r\n.win_game_modal{\r\n    width:300px;\r\n    height:200px;\r\n}\r\n\r\n/*********** Open Screen ***********/\r\n\r\n.open_screen{\r\n    display:flex;\r\n    justify-content: center;\r\n    align-items:center;\r\n    flex-direction: column;\r\n}\r\n\r\n.open_screen .inst_btn{\r\n    width:250px;\r\n}", ""]);
+exports.push([module.i, "#main_container{\r\n    display:flex;\r\n    justify-content: center;\r\n}\r\n\r\n/*********** Cards ***********/\r\n\r\n.cards_wrapper{\r\n    display:flex;\r\n    flex-wrap: wrap;\r\n    width:calc(250px * 6 + (6 * 2 * 5px));\r\n}\r\n\r\n.card_container{\r\n    width:250px;\r\n    height:300px;\r\n    margin:5px;\r\n    border-radius: 10px;\r\n    outline:none;\r\n}\r\n\r\n.flip_card:hover {\r\n    cursor:pointer;\r\n}\r\n\r\n.flip_card.flipped{\r\n    transform: rotateY(180deg);\r\n}\r\n\r\n.flip_card{\r\n    position:relative;\r\n    width:100%;\r\n    height:100%;\r\n    transition:0.9s;\r\n    transform-style:preserve-3d;\r\n}\r\n\r\n.back_card,\r\n.front_card{\r\n    width:100%;\r\n    height:100%;\r\n    position:absolute;\r\n}\r\n\r\n.front_card{\r\n    background:linear-gradient(to left, hotpink, blueviolet);\r\n}\r\n\r\n.back_card{\r\n    transform:rotateY(180deg);\r\n}\r\n\r\n.img_card{\r\n    width:100%;\r\n    height:100%;\r\n}\r\n\r\n/*********** General ***********/\r\n\r\n.truncate{\r\n    overflow:hidden;\r\n    white-space:nowrap;\r\n    text-overflow: ellipsis;\r\n}\r\n\r\n/*********** Buttons ***********/\r\n\r\n.btn{\r\n    width:100px;\r\n    height:50px;\r\n    font-size:1.5em;\r\n    outline: none;\r\n    cursor:pointer;\r\n    box-shadow:0 0 10px;\r\n}\r\n\r\n.btn:hover{\r\n    background:green;\r\n    color:#fff;\r\n    outline:none;\r\n    border:none;\r\n    box-shadow:0 0 10px #000;\r\n}\r\n\r\n.btn:active{\r\n    box-shadow:none;\r\n}\r\n\r\n.cancel_btn:hover{\r\n    background:red;\r\n}\r\n\r\n.inst_btn{\r\n    width:180px;\r\n    margin:15px;\r\n}\r\n\r\n\r\n/*********** Modal ***********/\r\n\r\n.modal{\r\n    position:absolute;\r\n    top:50%;\r\n    left:50%;\r\n    background: #fff;\r\n    z-index:2;\r\n    transform:translate(-50%, -50%);\r\n    width:480px;\r\n    height:528px;\r\n    padding:10px;\r\n    box-shadow:0 0 10px;\r\n}\r\n\r\n.modal_content{\r\n    display:flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    flex-wrap:wrap;\r\n}\r\n\r\n.modal_content h2{\r\n    text-align: center;\r\n}\r\n\r\n.modal_content input{\r\n    width:90%;\r\n    margin:5px 0;\r\n    font-size: 1em;\r\n    height:28px;\r\n    padding:0 5px;\r\n}\r\n\r\n.msg_game_modal{\r\n    width:350px;\r\n    height:175px;\r\n}\r\n\r\n/*********** Open Screen ***********/\r\n\r\n.open_screen{\r\n    display:flex;\r\n    justify-content: center;\r\n    align-items:center;\r\n    flex-direction: column;\r\n}\r\n\r\n.open_screen .inst_btn{\r\n    width:250px;\r\n}", ""]);
 
 // exports
 
