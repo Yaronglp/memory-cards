@@ -997,7 +997,7 @@ var Basic = function (_React$Component) {
         value: function btns(posTxt, overridePosBtn, negTxt, overrideNegBtn) {
             return _react2.default.createElement(
                 "div",
-                null,
+                { className: "btn_holder" },
                 this.negBtn(negTxt, overrideNegBtn),
                 this.posBtn(posTxt, overridePosBtn)
             );
@@ -18592,8 +18592,10 @@ var PlayGame = function (_React$Component) {
         _this.isPermittedToPeek = _this.isPermittedToPeek.bind(_this);
         _this.exitGame = _this.exitGame.bind(_this);
         _this.startTimer = _this.startTimer.bind(_this);
-        _this.rtPeekedCards = 0;
-        _this.timerTimout = null;
+        _this.rtPeekedCards = 3;
+        _this.timerTimeout = null;
+        _this.warningTimeout = null;
+        _this.interval = null;
         return _this;
     }
 
@@ -18629,16 +18631,30 @@ var PlayGame = function (_React$Component) {
         value: function startTimer() {
             var _this2 = this;
 
+            this.rtPeekedCards = 0;
+            var timerSec = _data2.default.timer.sec;
+            var timerEle = document.getElementById('timer');
+
             this.setState({
                 timerNote: false
             });
 
-            this.timerTimout = setTimeout(function () {
+            this.timerTimeout = setTimeout(function () {
                 _this2.rtPeekedCards = 3;
                 _this2.setState({
                     gameOver: true
                 });
-            }, _data2.default.timer.sec * 1000);
+                timerEle.innerHTML = '';
+                clearInterval(_this2.interval);
+            }, timerSec * 1000);
+
+            this.warningTimeout = setTimeout(function () {
+                timerEle.classList.add('warning');
+            }, (timerSec - 10) * 1000);
+
+            this.interval = setInterval(function () {
+                timerEle.innerHTML = --timerSec;
+            }, 1000);
         }
     }, {
         key: 'exitGame',
@@ -18652,7 +18668,9 @@ var PlayGame = function (_React$Component) {
     }, {
         key: 'finishGame',
         value: function finishGame() {
-            clearTimeout(this.timerTimout);
+            clearTimeout(this.warningTimeout);
+            clearTimeout(this.timerTimeout);
+            clearInterval(this.interval);
             this.setState({
                 finishGame: true
             });
@@ -18754,6 +18772,11 @@ var PlayGame = function (_React$Component) {
                     title: _data2.default.timer.title }) : null,
                 gameOver === true ? _react2.default.createElement(_Msg2.default, { okFN: this.exitGame,
                     title: _data2.default.gameOver.title }) : null,
+                _react2.default.createElement(
+                    'div',
+                    { id: 'timer' },
+                    ' '
+                ),
                 _react2.default.createElement(
                     'div',
                     { className: 'cards_wrapper' },
@@ -18916,13 +18939,17 @@ var Msg = function (_Basic) {
     }
 
     _createClass(Msg, [{
-        key: 'render',
+        key: "render",
         value: function render() {
             return React.createElement(
                 _Basic3.default,
-                { modalClass: 'msg_game_modal' },
+                { modalClass: "msg_game_modal" },
                 _Basic3.default.title(this.titleTxt),
-                this.posBtn('OK')
+                React.createElement(
+                    "div",
+                    { className: "btn_holder" },
+                    this.posBtn('OK')
+                )
             );
         }
     }]);
@@ -19157,7 +19184,7 @@ exports = module.exports = __webpack_require__(37)();
 
 
 // module
-exports.push([module.i, "#main_container{\r\n    display:flex;\r\n    justify-content: center;\r\n}\r\n\r\n/*********** Cards ***********/\r\n\r\n.cards_wrapper{\r\n    display:flex;\r\n    flex-wrap: wrap;\r\n    width:calc(250px*6 + (6*2*5px));\r\n}\r\n\r\n.card_container{\r\n    width:250px;\r\n    height:300px;\r\n    margin:5px;\r\n    border-radius: 10px;\r\n    outline:none;\r\n}\r\n\r\n.flip_card:hover {\r\n    cursor:pointer;\r\n}\r\n\r\n.flip_card.flipped{\r\n    transform:rotateY(180deg);\r\n    -webkit-transform:rotateY(180deg);\r\n}\r\n\r\n.flip_card{\r\n    position:relative;\r\n    width:100%;\r\n    height:100%;\r\n    transition:0.9s;\r\n    -webkit-transition:0.9s;\r\n    transform-style:preserve-3d;\r\n    -webkit-transform-style:preserve-3d;\r\n}\r\n\r\n.back_card,\r\n.front_card{\r\n    width:100%;\r\n    height:100%;\r\n    position:absolute;\r\n    backface-visibility: hidden;\r\n    -webkit-backface-visibility: hidden;\r\n}\r\n\r\n.front_card{\r\n    background:linear-gradient(to left, hotpink, blueviolet);\r\n}\r\n\r\n.back_card{\r\n    transform:rotateY(180deg);\r\n    -webkit-transform:rotateY(180deg);\r\n}\r\n\r\n.img_card{\r\n    width:100%;\r\n    height:100%;\r\n}\r\n\r\n/*********** General ***********/\r\n\r\n.truncate{\r\n    overflow:hidden;\r\n    white-space:nowrap;\r\n    text-overflow: ellipsis;\r\n}\r\n\r\n/*********** Buttons ***********/\r\n\r\n.btn{\r\n    width:100px;\r\n    height:50px;\r\n    font-size:1.5em;\r\n    outline: none;\r\n    cursor:pointer;\r\n    box-shadow:0 0 10px;\r\n}\r\n\r\n.btn:hover{\r\n    background:green;\r\n    color:#fff;\r\n    outline:none;\r\n    border:none;\r\n    box-shadow:0 0 10px #000;\r\n}\r\n\r\n.btn:active{\r\n    box-shadow:none;\r\n}\r\n\r\n.cancel_btn:hover{\r\n    background:red;\r\n}\r\n\r\n.inst_btn{\r\n    width:180px;\r\n    margin:15px;\r\n}\r\n\r\n\r\n/*********** Modal ***********/\r\n\r\n.modal{\r\n    position:absolute;\r\n    top:50%;\r\n    left:50%;\r\n    background: #fff;\r\n    z-index:2;\r\n    transform:translate(-50%, -50%);\r\n    width:480px;\r\n    height:528px;\r\n    padding:10px;\r\n    box-shadow:0 0 10px;\r\n}\r\n\r\n.modal_content{\r\n    display:flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    flex-wrap:wrap;\r\n}\r\n\r\n.modal_content h2{\r\n    text-align: center;\r\n}\r\n\r\n.modal_content input{\r\n    width:90%;\r\n    margin:5px 0;\r\n    font-size: 1em;\r\n    height:28px;\r\n    padding:0 5px;\r\n}\r\n\r\n.msg_game_modal{\r\n    width:350px;\r\n    height:175px;\r\n}\r\n\r\n/*********** Open Screen ***********/\r\n\r\n.open_screen{\r\n    display:flex;\r\n    justify-content: center;\r\n    align-items:center;\r\n    flex-direction: column;\r\n}\r\n\r\n.open_screen .inst_btn{\r\n    width:250px;\r\n}", ""]);
+exports.push([module.i, "#main_container{\r\n    display:flex;\r\n    justify-content: center;\r\n}\r\n\r\n/*********** Cards ***********/\r\n\r\n.cards_wrapper{\r\n    display:flex;\r\n    flex-wrap: wrap;\r\n    width:calc(250px*6 + (6*2*5px));\r\n}\r\n\r\n.card_container{\r\n    width:250px;\r\n    height:300px;\r\n    margin:5px;\r\n    border-radius: 10px;\r\n    outline:none;\r\n}\r\n\r\n.flip_card:hover {\r\n    cursor:pointer;\r\n}\r\n\r\n.flip_card.flipped{\r\n    transform:rotateY(180deg);\r\n    -webkit-transform:rotateY(180deg);\r\n}\r\n\r\n.flip_card{\r\n    position:relative;\r\n    width:100%;\r\n    height:100%;\r\n    transition:0.9s;\r\n    -webkit-transition:0.9s;\r\n    transform-style:preserve-3d;\r\n    -webkit-transform-style:preserve-3d;\r\n}\r\n\r\n.back_card,\r\n.front_card{\r\n    width:100%;\r\n    height:100%;\r\n    position:absolute;\r\n    backface-visibility: hidden;\r\n    -webkit-backface-visibility: hidden;\r\n}\r\n\r\n.front_card{\r\n    background:linear-gradient(to left, hotpink, blueviolet);\r\n}\r\n\r\n.back_card{\r\n    transform:rotateY(180deg);\r\n    -webkit-transform:rotateY(180deg);\r\n}\r\n\r\n.img_card{\r\n    width:100%;\r\n    height:100%;\r\n}\r\n\r\n/*********** General ***********/\r\n\r\n.truncate{\r\n    overflow:hidden;\r\n    white-space:nowrap;\r\n    text-overflow: ellipsis;\r\n}\r\n\r\n/*********** Buttons ***********/\r\n\r\n.btn{\r\n    width:100px;\r\n    height:50px;\r\n    font-size:1.5em;\r\n    outline: none;\r\n    cursor:pointer;\r\n    box-shadow:0 0 10px;\r\n}\r\n\r\n.btn:hover{\r\n    background:green;\r\n    color:#fff;\r\n    outline:none;\r\n    border:none;\r\n    box-shadow:0 0 10px #000;\r\n}\r\n\r\n.btn:active{\r\n    box-shadow:none;\r\n}\r\n\r\n.cancel_btn:hover{\r\n    background:red;\r\n}\r\n\r\n.inst_btn{\r\n    width:180px;\r\n    margin:15px;\r\n}\r\n\r\n.btn_holder{\r\n    position:absolute;\r\n    bottom:10px;\r\n}\r\n\r\n\r\n/*********** Modal ***********/\r\n\r\n.modal{\r\n    position:absolute;\r\n    top:50%;\r\n    left:50%;\r\n    background: #fff;\r\n    z-index:2;\r\n    transform:translate(-50%, -50%);\r\n    width:480px;\r\n    height:528px;\r\n    padding:10px;\r\n    box-shadow:0 0 10px;\r\n}\r\n\r\n.modal_content{\r\n    display:flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    flex-wrap:wrap;\r\n}\r\n\r\n.modal_content h2{\r\n    text-align: center;\r\n}\r\n\r\n.modal_content input{\r\n    width:90%;\r\n    margin:5px 0;\r\n    font-size: 1em;\r\n    height:28px;\r\n    padding:0 5px;\r\n}\r\n\r\n.msg_game_modal{\r\n    width:350px;\r\n    height:175px;\r\n}\r\n\r\n/*********** Open Screen ***********/\r\n\r\n.open_screen{\r\n    display:flex;\r\n    justify-content: center;\r\n    align-items:center;\r\n    flex-direction: column;\r\n}\r\n\r\n.open_screen .inst_btn{\r\n    width:250px;\r\n}\r\n\r\n/*********** Timer ***********/\r\n\r\n#timer{\r\n    width:60px;\r\n    height:60px;\r\n    text-align: center;\r\n    font-size: 3em;\r\n    position:absolute;\r\n    top: 0;\r\n    left: 0;\r\n    margin:20px;\r\n}\r\n\r\n#timer.warning{\r\n    color:red;\r\n}", ""]);
 
 // exports
 
