@@ -11,7 +11,7 @@ class PlayGame extends React.Component{
         this.isPermittedToPeek = this.isPermittedToPeek.bind(this);
         this.exitGame = this.exitGame.bind(this);
         this.startTimer = this.startTimer.bind(this);
-        this.rtPeekedCards = 0;
+        this.rtPeekedCards = 3;
         this.timerTimout = null;
     }
 
@@ -39,6 +39,7 @@ class PlayGame extends React.Component{
     }
 
     startTimer(){
+        this.rtPeekedCards = 0;
         this.setState({
             timerNote:false
         });
