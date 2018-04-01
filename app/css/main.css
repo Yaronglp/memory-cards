@@ -101,6 +101,11 @@
     margin:15px;
 }
 
+.btn_holder{
+    position:absolute;
+    bottom:10px;
+}
+
 
 /*********** Modal ***********/
 
@@ -152,4 +157,21 @@
 
 .open_screen .inst_btn{
     width:250px;
+}
+
+/*********** Timer ***********/
+
+#timer{
+    width:60px;
+    height:60px;
+    text-align: center;
+    font-size: 3em;
+    position:absolute;
+    top: 0;
+    left: 0;
+    margin:20px;
+}
+
+#timer.warning{
+    color:red;
 }

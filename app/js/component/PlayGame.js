@@ -12,7 +12,9 @@ class PlayGame extends React.Component{
         this.exitGame = this.exitGame.bind(this);
         this.startTimer = this.startTimer.bind(this);
         this.rtPeekedCards = 3;
-        this.timerTimout = null;
+        this.timerTimeout = null;
+        this.warningTimeout = null;
+        this.interval = null;
     }
 
     componentWillMount(){
@@ -40,17 +42,30 @@ class PlayGame extends React.Component{
 
     startTimer(){
         this.rtPeekedCards = 0;
+        let timerSec = data.timer.sec;
+        let timerEle = document.getElementById('timer');
+
         this.setState({
             timerNote:false
         });
 
-        this.timerTimout = setTimeout(() => {
+        this.timerTimeout = setTimeout(() => {
                                 this.rtPeekedCards = 3;
                                 this.setState({
                                     gameOver:true
                                 });
+                                timerEle.innerHTML = '';
+                                clearInterval(this.interval);
 
-                            }, data.timer.sec * 1000);
+                            }, timerSec * 1000);
+
+        this.warningTimeout = setTimeout(() => {
+                                  timerEle.classList.add('warning');
+                              }, (timerSec - 10) * 1000);
+
+        this.interval = setInterval(() => {
+            timerEle.innerHTML = --timerSec;
+        }, 1000);
     }
 
     exitGame(){
@@ -62,7 +77,9 @@ class PlayGame extends React.Component{
     }
 
     finishGame(){
-        clearTimeout(this.timerTimout);
+        clearTimeout(this.warningTimeout);
+        clearTimeout(this.timerTimeout);
+        clearInterval(this.interval);
         this.setState({
             finishGame:true
         });
@@ -159,6 +176,7 @@ class PlayGame extends React.Component{
                              title={data.gameOver.title}/> :
                         null
                 }
+                <div id="timer"> </div>
                 <div className="cards_wrapper">
                     {
                         cards.map((item, idx) => <Card key={idx}

@@ -9,7 +9,9 @@ class Msg extends Basic {
         return (
             <Basic modalClass="msg_game_modal">
                 {Basic.title(this.titleTxt)}
-                {this.posBtn('OK')}
+                <div className="btn_holder">
+                    {this.posBtn('OK')}
+                </div>
             </Basic>
         );
     }

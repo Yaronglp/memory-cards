@@ -23,7 +23,7 @@ class Basic extends React.Component{
     }
 
     btns(posTxt, overridePosBtn, negTxt, overrideNegBtn){
-        return <div>
+        return <div className="btn_holder">
                     {this.negBtn(negTxt, overrideNegBtn)}
                     {this.posBtn(posTxt, overridePosBtn)}
                </div>
