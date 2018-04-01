@@ -8,7 +8,7 @@
 .cards_wrapper{
     display:flex;
     flex-wrap: wrap;
-    width:calc(250px * 6 + (6 * 2 * 5px));
+    width:calc(250px*6 + (6*2*5px));
 }
 
 .card_container{
@@ -24,8 +24,8 @@
 }
 
 .flip_card.flipped{
-    transform: rotateY(180deg);
-    -webkit-transform: rotateY(180deg);
+    transform:rotateY(180deg);
+    -webkit-transform:rotateY(180deg);
 }
 
 .flip_card{
