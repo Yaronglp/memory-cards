@@ -1,4 +1,4 @@
-# Memory_Cards
+# Memory-Cards
 
 Memory Cards Game.  
 Fun & Addictive.  
